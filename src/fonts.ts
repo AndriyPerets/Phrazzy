@@ -1,0 +1,12 @@
+export const ExtraBold = 'AzeretMono-ExtraBold';
+export const ExtraBoldItalic = 'AzeretMono-ExtraBoldItalic';
+export const Italic = 'AzeretMono-Italic';
+export const Regular = 'AzeretMono-Regular';
+export const SemiBold = 'AzeretMono-SemiBold';
+export const SemiBoldItalic = 'AzeretMono-SemiBoldItalic';
+export const Bold = 'AzeretMono-Bold';
+export const Black = 'AzeretMono-Black';
+export const ExtraLight = 'AzeretMono-ExtraLight';
+export const Light = 'AzeretMono-Light';
+export const Medium = 'AzeretMono-Medium';
+export const Thin = 'AzeretMono-Thin';
