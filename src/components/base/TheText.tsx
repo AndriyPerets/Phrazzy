@@ -1,7 +1,7 @@
 import React from 'react';
 import {TextProps, Text} from 'react-native';
-import {Bold} from '../../fonts';
-import {WHITE} from '../../colors';
+import {Regular} from '../../fonts';
+import {BLACK} from '../../colors';
 
 export interface TheTextProps extends TextProps {
   bold?: boolean;
@@ -27,10 +27,10 @@ const TheText = ({
   children,
   style,
   fontSize = 20,
-  color = WHITE,
+  color = BLACK,
   letterSpacingPercent,
   textTransform,
-  fontFamily = Bold,
+  fontFamily = Regular,
   textAlign,
   underline,
   ...restProps

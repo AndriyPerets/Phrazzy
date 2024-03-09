@@ -26,7 +26,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
@@ -34,6 +33,18 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SFPRODISPLAYREGULAR.ttf</string>
+		<string>SFPRODISPLAYBOLD.ttf</string>
+		<string>SFPRODISPLAYBLACKITALIC.ttf</string>
+		<string>SFPRODISPLAYSEMIBOLDITALIC.ttf</string>
+		<string>SFPRODISPLAYTHINITALIC.ttf</string>
+		<string>SFPRODISPLAYULTRALIGHTITALIC.ttf</string>
+		<string>SFPRODISPLAYHEAVYITALIC.ttf</string>
+		<string>SFPRODISPLAYLIGHTITALIC.ttf</string>
+		<string>SFPRODISPLAYMEDIUM.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -48,26 +59,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>AzeretMono-Black.ttf</string>
-		<string>AzeretMono-BlackItalic.ttf</string>
-		<string>AzeretMono-Bold.ttf</string>
-		<string>AzeretMono-BoldItalic.ttf</string>
-		<string>AzeretMono-ExtraBold.ttf</string>
-		<string>AzeretMono-ExtraBoldItalic.ttf</string>
-		<string>AzeretMono-ExtraLight.ttf</string>
-		<string>AzeretMono-ExtraLightItalic.ttf</string>
-		<string>AzeretMono-Italic.ttf</string>
-		<string>AzeretMono-Light.ttf</string>
-		<string>AzeretMono-LightItalic.ttf</string>
-		<string>AzeretMono-Medium.ttf</string>
-		<string>AzeretMono-MediumItalic.ttf</string>
-		<string>AzeretMono-Regular.ttf</string>
-		<string>AzeretMono-SemiBold.ttf</string>
-		<string>AzeretMono-SemiBoldItalic.ttf</string>
-		<string>AzeretMono-Thin.ttf</string>
-		<string>AzeretMono-ThinItalic.ttf</string>
-	</array>
 </dict>
 </plist>

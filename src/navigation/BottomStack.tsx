@@ -1,20 +1,16 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {BLACK, MEDIUMGRAY, WHITE} from '../colors.ts';
+import {BLACK, BRIGHTBLUE, WHITE} from '../colors';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
-import FeedActiveIcon from '../components/svg/menu-feed-active.tsx';
-import FeedIcon from '../components/svg/menu-feed.tsx';
-import ChallengeActiveIcon from '../components/svg/menu-challenges-active.tsx';
-import ChallengeIcon from '../components/svg/menu-challenges.tsx';
-import ProfileActiveIcon from '../components/svg/menu-profile-active.tsx';
-import ProfileIcon from '../components/svg/menu-profile.tsx';
-import MessagesIcon from '../components/svg/menu-messages.tsx';
-import MessagesActiveIcon from '../components/svg/menu-messages-active.tsx';
-import LanguageScreen from '../screens/LanguageScreen.tsx';
-import TopicScreen from '../screens/TopicScreen.tsx';
-import PhraseScreen from '../screens/PhraseScreen.tsx';
-import SpeakScreen from '../screens/SpeakScreen.tsx';
+import LanguageScreen from '../screens/LanguageScreen';
+import TopicScreen from '../screens/TopicScreen';
+import PhraseScreen from '../screens/PhraseScreen';
+import SpeakScreen from '../screens/SpeakScreen';
+import GlobeIcon from '../components/svg/menu-globe';
+import TopicIcon from '../components/svg/menu-topic';
+import PhraseIcon from '../components/svg/menu-phrase';
+import PracticeIcon from '../components/svg/menu-practice';
 
 export type BottomStackParamList = {
   LanguageScreen: undefined;
@@ -35,30 +31,30 @@ const TabBarIcon: React.FC<TabBarIconProps> = ({route, focused}) => {
   switch (route.name) {
     case 'LanguageScreen':
       iconName = focused ? (
-        <FeedActiveIcon width={24} height={24} color={WHITE} />
+        <GlobeIcon color={BRIGHTBLUE} />
       ) : (
-        <FeedIcon width={24} height={24} color={MEDIUMGRAY} />
+        <GlobeIcon color={WHITE} />
       );
       break;
     case 'TopicScreen':
       iconName = focused ? (
-        <ChallengeActiveIcon width={24} height={24} color={WHITE} />
+        <TopicIcon color={BRIGHTBLUE} />
       ) : (
-        <ChallengeIcon width={24} height={24} color={MEDIUMGRAY} />
+        <TopicIcon color={WHITE} />
       );
       break;
     case 'PhraseScreen':
       iconName = focused ? (
-        <ProfileActiveIcon width={24} height={24} color={WHITE} />
+        <PhraseIcon color={BRIGHTBLUE} />
       ) : (
-        <ProfileIcon width={24} height={24} color={MEDIUMGRAY} />
+        <PhraseIcon color={WHITE} />
       );
       break;
     case 'SpeakScreen':
       iconName = focused ? (
-        <MessagesActiveIcon width={24} height={24} color={WHITE} />
+        <PracticeIcon color={BRIGHTBLUE} />
       ) : (
-        <MessagesIcon width={24} height={24} color={MEDIUMGRAY} />
+        <PracticeIcon color={WHITE} />
       );
       break;
     default:

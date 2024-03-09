@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, {Circle, Path} from 'react-native-svg';
-import {WHITE} from '../../colors';
+import {BRIGHTBLUE} from '../../colors';
 
 type Props = {
   width?: number;
@@ -11,7 +11,7 @@ type Props = {
 const StartIcon: React.FC<Props> = ({
   width = 393,
   height = 488,
-  color = '#CEE9FA',
+  color = BRIGHTBLUE,
 }: Props) => {
   return (
     <Svg width={width} height={height} viewBox="0 0 393 488" fill="none">

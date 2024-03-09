@@ -76,7 +76,7 @@ android {
 
     namespace "com.phrazzy"
     defaultConfig {
-        applicationId "com.phrazzy"
+        applicationId "Phrazzy"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,8 +1,8 @@
 import React from 'react';
 import {NavigatorScreenParams} from '@react-navigation/native';
-import BottomStack, {BottomStackParamList} from './BottomStack.tsx';
+import BottomStack, {BottomStackParamList} from './BottomStack';
 import {createStackNavigator} from '@react-navigation/stack';
-import HelloScreen from '../screens/HelloScreen.tsx';
+import HelloScreen from '../screens/HelloScreen';
 
 export type RootStackParamList = {
   Main: NavigatorScreenParams<BottomStackParamList>;

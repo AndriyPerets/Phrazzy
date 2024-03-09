@@ -10,10 +10,19 @@
 		00E356F31AD99517003FC87E /* PhrazzyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PhrazzyTests.m */; };
 		0C80B921A6F3F58F76C31292 /* libPods-Phrazzy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-Phrazzy.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-Phrazzy-PhrazzyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Phrazzy-PhrazzyTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A21DF4D42B82699D0087AC53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		A21DF5262B8275260087AC53 /* SFPRODISPLAYREGULAR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF51D2B8275260087AC53 /* SFPRODISPLAYREGULAR.ttf */; };
+		A21DF5272B8275260087AC53 /* SFPRODISPLAYBOLD.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF51E2B8275260087AC53 /* SFPRODISPLAYBOLD.ttf */; };
+		A21DF5282B8275260087AC53 /* SFPRODISPLAYBLACKITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF51F2B8275260087AC53 /* SFPRODISPLAYBLACKITALIC.ttf */; };
+		A21DF5292B8275260087AC53 /* SFPRODISPLAYSEMIBOLDITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5202B8275260087AC53 /* SFPRODISPLAYSEMIBOLDITALIC.ttf */; };
+		A21DF52A2B8275260087AC53 /* SFPRODISPLAYTHINITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5212B8275260087AC53 /* SFPRODISPLAYTHINITALIC.ttf */; };
+		A21DF52B2B8275260087AC53 /* SFPRODISPLAYULTRALIGHTITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5222B8275260087AC53 /* SFPRODISPLAYULTRALIGHTITALIC.ttf */; };
+		A21DF52C2B8275260087AC53 /* SFPRODISPLAYHEAVYITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5232B8275260087AC53 /* SFPRODISPLAYHEAVYITALIC.ttf */; };
+		A21DF52D2B8275260087AC53 /* SFPRODISPLAYLIGHTITALIC.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5242B8275260087AC53 /* SFPRODISPLAYLIGHTITALIC.ttf */; };
+		A21DF52E2B8275260087AC53 /* SFPRODISPLAYMEDIUM.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21DF5252B8275260087AC53 /* SFPRODISPLAYMEDIUM.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +52,15 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-Phrazzy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Phrazzy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Phrazzy/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Phrazzy-PhrazzyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Phrazzy-PhrazzyTests.release.xcconfig"; path = "Target Support Files/Pods-Phrazzy-PhrazzyTests/Pods-Phrazzy-PhrazzyTests.release.xcconfig"; sourceTree = "<group>"; };
+		A21DF51D2B8275260087AC53 /* SFPRODISPLAYREGULAR.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYREGULAR.ttf; path = ../public/assets/fonts/SFPRODISPLAYREGULAR.ttf; sourceTree = "<group>"; };
+		A21DF51E2B8275260087AC53 /* SFPRODISPLAYBOLD.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYBOLD.ttf; path = ../public/assets/fonts/SFPRODISPLAYBOLD.ttf; sourceTree = "<group>"; };
+		A21DF51F2B8275260087AC53 /* SFPRODISPLAYBLACKITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYBLACKITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYBLACKITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5202B8275260087AC53 /* SFPRODISPLAYSEMIBOLDITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYSEMIBOLDITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYSEMIBOLDITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5212B8275260087AC53 /* SFPRODISPLAYTHINITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYTHINITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYTHINITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5222B8275260087AC53 /* SFPRODISPLAYULTRALIGHTITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYULTRALIGHTITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYULTRALIGHTITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5232B8275260087AC53 /* SFPRODISPLAYHEAVYITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYHEAVYITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYHEAVYITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5242B8275260087AC53 /* SFPRODISPLAYLIGHTITALIC.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYLIGHTITALIC.ttf; path = ../public/assets/fonts/SFPRODISPLAYLIGHTITALIC.ttf; sourceTree = "<group>"; };
+		A21DF5252B8275260087AC53 /* SFPRODISPLAYMEDIUM.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = SFPRODISPLAYMEDIUM.ttf; path = ../public/assets/fonts/SFPRODISPLAYMEDIUM.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -116,6 +134,15 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A21DF51F2B8275260087AC53 /* SFPRODISPLAYBLACKITALIC.ttf */,
+				A21DF51E2B8275260087AC53 /* SFPRODISPLAYBOLD.ttf */,
+				A21DF5232B8275260087AC53 /* SFPRODISPLAYHEAVYITALIC.ttf */,
+				A21DF5242B8275260087AC53 /* SFPRODISPLAYLIGHTITALIC.ttf */,
+				A21DF5252B8275260087AC53 /* SFPRODISPLAYMEDIUM.ttf */,
+				A21DF51D2B8275260087AC53 /* SFPRODISPLAYREGULAR.ttf */,
+				A21DF5202B8275260087AC53 /* SFPRODISPLAYSEMIBOLDITALIC.ttf */,
+				A21DF5212B8275260087AC53 /* SFPRODISPLAYTHINITALIC.ttf */,
+				A21DF5222B8275260087AC53 /* SFPRODISPLAYULTRALIGHTITALIC.ttf */,
 				13B07FAE1A68108700A75B9A /* Phrazzy */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* PhrazzyTests */,
@@ -241,8 +268,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A21DF5262B8275260087AC53 /* SFPRODISPLAYREGULAR.ttf in Resources */,
+				A21DF5272B8275260087AC53 /* SFPRODISPLAYBOLD.ttf in Resources */,
+				A21DF5282B8275260087AC53 /* SFPRODISPLAYBLACKITALIC.ttf in Resources */,
+				A21DF5292B8275260087AC53 /* SFPRODISPLAYSEMIBOLDITALIC.ttf in Resources */,
+				A21DF52A2B8275260087AC53 /* SFPRODISPLAYTHINITALIC.ttf in Resources */,
+				A21DF52B2B8275260087AC53 /* SFPRODISPLAYULTRALIGHTITALIC.ttf in Resources */,
+				A21DF52C2B8275260087AC53 /* SFPRODISPLAYHEAVYITALIC.ttf in Resources */,
+				A21DF52D2B8275260087AC53 /* SFPRODISPLAYLIGHTITALIC.ttf in Resources */,
+				A21DF52E2B8275260087AC53 /* SFPRODISPLAYMEDIUM.ttf in Resources */,
+				A21DF4D42B82699D0087AC53 /* Images.xcassets in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +502,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LGX5XK494C;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Phrazzy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -479,6 +516,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = Phrazzy;
 				PRODUCT_NAME = Phrazzy;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -493,6 +531,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LGX5XK494C;
 				INFOPLIST_FILE = Phrazzy/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -505,6 +544,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = Phrazzy;
 				PRODUCT_NAME = Phrazzy;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

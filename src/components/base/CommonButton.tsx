@@ -10,7 +10,7 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-import {DARKGRAY, GRAY, WHITE} from '../../colors';
+import {GRAY, LIGHTGRAY, WHITE} from '../../colors';
 import TheText from './TheText';
 
 interface Props extends PressableProps {
@@ -29,6 +29,8 @@ interface Props extends PressableProps {
   height?: number;
   width?: string | number;
   fontSize?: number;
+  borderRadius?: number;
+  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between';
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -49,29 +51,44 @@ const CommonButton = ({
   height = 50,
   width = '100%',
   fontSize = 14,
+  borderRadius,
+  justifyContent = 'center',
   ...restTouchableOpacityProps
 }: Props) => {
   const calculatedWidth =
     typeof width === 'number' ? width : (parseFloat(width) / 100) * screenWidth;
   const backgroundColor = isLoading ? GRAY : color || GRAY;
   const contentOpacity = isLoading ? 0.9 : 1;
-  const renderIconSpace = () => (
-    <View style={{width: iconSize, height: iconSize}} />
+  const renderIcon = (icon: JSX.Element | undefined) => (
+    <View
+      style={{
+        width: iconSize,
+        height: iconSize,
+        borderRadius: iconSize / 2,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: iconPosition === 'start' ? 8 : 0,
+        marginLeft: iconPosition === 'end' ? 8 : 0,
+      }}>
+      {icon}
+    </View>
   );
-  const renderSpacer = () => <View style={{width: 8}} />;
+  // const renderSpacer = () => <View style={{width: 8}} />;
   return (
     <Pressable
       disabled={disabled}
       {...restTouchableOpacityProps}
-      style={[
+      style={({pressed}) => [
         styles.container,
         {
           height: height,
           width: calculatedWidth,
-          backgroundColor: backgroundColor || GRAY,
-          borderColor: borderColor || DARKGRAY,
+          backgroundColor: pressed ? LIGHTGRAY : backgroundColor || GRAY,
+          borderColor: borderColor || LIGHTGRAY,
           borderWidth: borderColor ? 1 : 0,
-          opacity: contentOpacity,
+          opacity: pressed ? 0.5 : contentOpacity,
+          borderRadius: borderRadius || 16,
         },
         style,
       ]}>
@@ -84,35 +101,42 @@ const CommonButton = ({
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {iconPosition === 'startOut' && icon}
-          {icon && iconPosition === 'endOut' && renderIconSpace()}
+          <View style={{width: iconSize}}>
+            {icon && iconPosition === 'startOut' && renderIcon(icon)}
+            {/*{icon && iconPosition === 'endOut' && renderSpacer()}*/}
+          </View>
           <View
             style={{
               flex: 1,
               flexDirection: 'row',
-              justifyContent: 'center',
+              justifyContent: justifyContent || 'center',
               alignItems: 'center',
               // borderWidth: 1,
               // borderColor: 'red',
             }}>
-            {iconPosition === 'start' && icon}
-            {icon && iconPosition === 'start' && renderSpacer()}
+            <View style={{width: iconSize}}>
+              {/*{icon && iconPosition === 'start' && renderSpacer()}*/}
+              {icon && iconPosition === 'start' && renderIcon(icon)}
+            </View>
             <TheText
               style={[
                 textStyle,
                 {textTransform: textTransform},
                 {fontSize: fontSize},
-                // {opacity: disabled ? 0.9 : 1, textTransform: textTransform},
               ]}
               color={textColor || WHITE}
               bold>
               {title}
             </TheText>
-            {iconPosition === 'end' && renderSpacer()}
-            {iconPosition === 'end' && icon}
+            <View style={{width: iconSize}}>
+              {/*{iconPosition === 'end' && renderSpacer()}*/}
+              {iconPosition === 'end' && renderIcon(icon)}
+            </View>
           </View>
-          {iconPosition === 'endOut' && icon}
-          {icon && iconPosition === 'startOut' && renderIconSpace()}
+          <View style={{width: iconSize}}>
+            {icon && iconPosition === 'endOut' && renderIcon(icon)}
+            {/*{icon && iconPosition === 'startOut' && renderSpacer()}*/}
+          </View>
         </View>
       )}
     </Pressable>
@@ -123,10 +147,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 16,
+    // borderRadius: 16,
     paddingHorizontal: 10,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
 });
 
