@@ -1,18 +1,20 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import TheText from '../components/base/TheText';
-import {BLACK, BRIGHTBLUE, LIGHTGRAY} from '../colors';
+import {BLACK, BRIGHTBLUE, GRAY} from '../colors';
 import Go from '../components/svg/go';
 import {BlackItalic, UltraLightItalic} from '../fonts';
 import React, {useEffect, useState} from 'react';
 import VerticalSpace from '../components/base/VerticalSpace';
 import BackIcon from '../components/svg/back';
 import CommonButton from '../components/base/CommonButton';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/AppNavigator';
+import {StackScreenProps} from '@react-navigation/stack';
+import {BottomStackParamList} from '../navigation/BottomStack';
 
-const SpeakScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+type SpeakScreenNavigationProp = StackScreenProps<
+  BottomStackParamList,
+  'SpeakScreen'
+>;
+const SpeakScreen = ({navigation}: SpeakScreenNavigationProp) => {
   const [showGo, setShowGo] = useState(true);
 
   useEffect(() => {
@@ -67,10 +69,10 @@ const SpeakScreen = () => {
               width={'80%'}
               color={BRIGHTBLUE}
               textColor={BLACK}
-              borderRadius={25}
+              borderColor={GRAY}
             />
           </View>
-          <VerticalSpace height={20} />
+          <VerticalSpace height={40} />
         </>
       )}
     </View>

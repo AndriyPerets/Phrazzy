@@ -1,24 +1,27 @@
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/AppNavigator';
 import TheText from '../components/base/TheText';
-import {BLACK, BRIGHTBLUE, LIGHTGRAY, WHITE} from '../colors';
+import {BLACK, BRIGHTBLUE, GRAY, LIGHTGRAY, WHITE} from '../colors';
 import VerticalSpace from '../components/base/VerticalSpace';
 import BackIcon from '../components/svg/back';
 import {BlackItalic} from '../fonts';
 import CommonButton from '../components/base/CommonButton';
+import {BottomStackParamList} from '../navigation/BottomStack';
+import {StackScreenProps} from '@react-navigation/stack';
 
-const PhraseScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+type PhraseScreenNavigationProp = StackScreenProps<
+  BottomStackParamList,
+  'PhraseScreen'
+>;
+
+const PhraseScreen = ({navigation, route}: PhraseScreenNavigationProp) => {
+  // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [selectedPhrase, setSelectedPhrase] = useState('');
+  const phrases = route.params?.phrases || [];
 
   const handlePhrase = (phrase: string) => {
     setSelectedPhrase(phrase);
   };
-
-  let phrases = ['Hello', 'Goodbye', 'Please', 'Thank you', 'Yes', 'No'];
 
   const handleNext = () => {
     if (selectedPhrase !== '') {
@@ -27,7 +30,7 @@ const PhraseScreen = () => {
   };
 
   const handleBack = () => {
-    navigation.goBack();
+    navigation.navigate('TopicScreen');
   };
 
   return (
@@ -42,7 +45,7 @@ const PhraseScreen = () => {
           fontSize={16}
           color={BLACK}
           textTransform={'uppercase'}>
-          Select a topic
+          Select phrases
         </TheText>
         <View style={styles.icon} />
       </View>
@@ -71,10 +74,10 @@ const PhraseScreen = () => {
           width={'80%'}
           color={selectedPhrase !== '' ? BRIGHTBLUE : LIGHTGRAY}
           textColor={BLACK}
-          borderRadius={25}
+          borderColor={GRAY}
         />
       </View>
-      <VerticalSpace height={20} />
+      <VerticalSpace height={40} />
     </View>
   );
 };

@@ -1,26 +1,62 @@
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../navigation/AppNavigator';
+import {StackScreenProps} from '@react-navigation/stack';
 import TheText from '../components/base/TheText';
-import {BLACK, BRIGHTBLUE, LIGHTGRAY, WHITE} from '../colors';
-import {BlackItalic, Bold, Regular} from '../fonts';
+import {BLACK, BRIGHTBLUE, GRAY, LIGHTGRAY, WHITE} from '../colors';
+import {BlackItalic, Regular} from '../fonts';
 import VerticalSpace from '../components/base/VerticalSpace';
 import CommonButton from '../components/base/CommonButton';
 import GermanyIcon from '../components/svg/germany';
 import UKIcon from '../components/svg/uk';
 import UkraineIcon from '../components/svg/ukrane';
 import SpainIcon from '../components/svg/spain';
+import {BottomStackParamList} from '../navigation/BottomStack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LanguageScreen = () => {
+type LanguageScreenNavigationProp = StackScreenProps<
+  BottomStackParamList,
+  'LanguageScreen'
+>;
+
+const LanguageScreen = ({navigation}: LanguageScreenNavigationProp) => {
   const [isMenuForNativeLanguageOpen, setIsMenuForNativeLanguageOpen] =
     useState(false);
   const [isMenuForLanguageToLearnOpen, setIsMenuForLanguageToLearnOpen] =
     useState(false);
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [selectedNativeLanguage, setSelectedNativeLanguage] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
+
+  // Извлечение сохраненных языков из AsyncStorage при монтировании компонента
+  useEffect(() => {
+    const getLanguages = async () => {
+      const savedNativeLanguage = await AsyncStorage.getItem(
+        'selectedNativeLanguage',
+      );
+      const savedLanguage = await AsyncStorage.getItem('selectedLanguage');
+      if (savedNativeLanguage) {
+        setSelectedNativeLanguage(savedNativeLanguage);
+      }
+      if (savedLanguage) {
+        setSelectedLanguage(savedLanguage);
+      }
+    };
+
+    getLanguages();
+  }, []);
+
+  // Сохранение выбранных языков в AsyncStorage каждый раз, когда они меняются
+  useEffect(() => {
+    if (selectedNativeLanguage) {
+      AsyncStorage.setItem('selectedNativeLanguage', selectedNativeLanguage);
+    }
+  }, [selectedNativeLanguage]);
+
+  useEffect(() => {
+    if (selectedLanguage) {
+      AsyncStorage.setItem('selectedLanguage', selectedLanguage);
+    }
+  }, [selectedLanguage]);
 
   const handleNativeLanguage = (language: string) => {
     setSelectedNativeLanguage(language);
@@ -72,7 +108,7 @@ const LanguageScreen = () => {
         </TheText>
       </View>
       <CommonButton
-        title={selectedNativeLanguage || 'Select a language'}
+        title={selectedNativeLanguage || 'Select your native language'}
         onPress={() =>
           setIsMenuForNativeLanguageOpen(!isMenuForNativeLanguageOpen)
         }
@@ -89,7 +125,7 @@ const LanguageScreen = () => {
           <VerticalSpace height={10} />
           <View style={styles.text}>
             <TheText fontFamily={Regular} fontSize={12} color={BLACK}>
-              I want to learn
+              My native language
             </TheText>
           </View>
           <FlatList
@@ -121,7 +157,7 @@ const LanguageScreen = () => {
         </TheText>
       </View>
       <CommonButton
-        title={selectedLanguage || 'Select a language'}
+        title={selectedLanguage || 'Select language to learn'}
         onPress={() =>
           setIsMenuForLanguageToLearnOpen(!isMenuForLanguageToLearnOpen)
         }
@@ -174,10 +210,10 @@ const LanguageScreen = () => {
               : LIGHTGRAY
           }
           textColor={BLACK}
-          borderRadius={25}
+          borderColor={GRAY}
         />
       </View>
-      <VerticalSpace height={20} />
+      <VerticalSpace height={40} />
     </View>
   );
 };

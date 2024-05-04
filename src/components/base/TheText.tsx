@@ -21,6 +21,7 @@ export interface TheTextProps extends TextProps {
   fontFamily?: string;
   textAlign?: 'auto' | 'left' | 'right' | 'center' | 'justify';
   underline?: boolean;
+  lineHeight?: number;
 }
 
 const TheText = ({
@@ -33,6 +34,7 @@ const TheText = ({
   fontFamily = Regular,
   textAlign,
   underline,
+  lineHeight,
   ...restProps
 }: TheTextProps) => {
   return (
@@ -48,6 +50,7 @@ const TheText = ({
           textTransform: textTransform,
           textAlign: textAlign,
           textDecorationLine: underline ? 'underline' : 'none',
+          lineHeight: lineHeight,
         },
         style,
       ]}>

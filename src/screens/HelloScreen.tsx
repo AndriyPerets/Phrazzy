@@ -1,19 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {UltraLightItalic} from '../fonts';
-import {RootStackParamList} from '../navigation/AppNavigator';
 import TheText from '../components/base/TheText';
 import {BLACK, GRAY} from '../colors';
 import Start from '../components/svg/start';
-import CommonButton from '../components/base/CommonButton';
+import {BottomStackParamList} from '../navigation/BottomStack';
+import {StackScreenProps} from '@react-navigation/stack';
 
-const HelloScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const handleStart = () => {
-    navigation.navigate('Main', {screen: 'LanguageScreen'});
-  };
+type HelloScreenNavigationProp = StackScreenProps<
+  BottomStackParamList,
+  'HelloScreen'
+>;
+const HelloScreen = ({navigation}: HelloScreenNavigationProp) => {
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.navigate('LanguageScreen');
+    }, 1000); // Set to 1000ms or 1 second, adjust as needed
+
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -28,14 +34,6 @@ const HelloScreen = () => {
       <View style={styles.buttonContainer}>
         <View style={styles.icon}>
           <Start />
-        </View>
-        <View style={styles.button}>
-          <CommonButton
-            title={' Start'}
-            onPress={handleStart}
-            width={'80%'}
-            color={BLACK}
-          />
         </View>
       </View>
     </View>
