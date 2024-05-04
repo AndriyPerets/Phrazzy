@@ -14,12 +14,16 @@ type SpeakScreenNavigationProp = StackScreenProps<
   BottomStackParamList,
   'SpeakScreen'
 >;
-const SpeakScreen = ({navigation}: SpeakScreenNavigationProp) => {
-  const [showGo, setShowGo] = useState(true);
+const SpeakScreen = ({navigation, route}: SpeakScreenNavigationProp) => {
+  const [selectedPhrases] = useState<string[]>(
+    route.params.selectedPhrases || [],
+  );
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const [goScreen, setGoScreen] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowGo(false);
+      setGoScreen(false);
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -29,11 +33,17 @@ const SpeakScreen = ({navigation}: SpeakScreenNavigationProp) => {
     navigation.goBack();
   };
 
-  const handleNext = () => {};
+  const handleNext = () => {
+    if (currentPhraseIndex < selectedPhrases.length - 1) {
+      setCurrentPhraseIndex(currentPhraseIndex + 1);
+    } else {
+      setCurrentPhraseIndex(0);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {showGo ? (
+      {goScreen ? (
         <>
           <View style={styles.textContainer}>
             <TheText color={BLACK} fontSize={96} fontFamily={UltraLightItalic}>
@@ -62,6 +72,13 @@ const SpeakScreen = ({navigation}: SpeakScreenNavigationProp) => {
             </TheText>
             <View style={styles.icon} />
           </View>
+          <TheText
+            fontFamily={UltraLightItalic}
+            fontSize={24}
+            color={BLACK}
+            style={styles.phrase}>
+            {selectedPhrases[currentPhraseIndex]}
+          </TheText>
           <View style={styles.footer}>
             <CommonButton
               title={'Next Phrase'}
@@ -139,6 +156,10 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // borderWidth: 1,
     // borderColor: 'red',
+  },
+  phrase: {
+    textAlign: 'center',
+    marginHorizontal: 20, // Add margins for better text display
   },
   footer: {
     flex: 1,

@@ -16,16 +16,22 @@ type PhraseScreenNavigationProp = StackScreenProps<
 
 const PhraseScreen = ({navigation, route}: PhraseScreenNavigationProp) => {
   // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [selectedPhrase, setSelectedPhrase] = useState('');
+  const [selectedPhrases, setSelectedPhrases] = useState<string[]>([]);
   const phrases = route.params?.phrases || [];
 
   const handlePhrase = (phrase: string) => {
-    setSelectedPhrase(phrase);
+    if (selectedPhrases.includes(phrase)) {
+      setSelectedPhrases(
+        selectedPhrases.filter((item: string) => item !== phrase),
+      );
+    } else {
+      setSelectedPhrases([...selectedPhrases, phrase]);
+    }
   };
 
   const handleNext = () => {
-    if (selectedPhrase !== '') {
-      navigation.navigate('SpeakScreen');
+    if (selectedPhrases.length > 0) {
+      navigation.navigate('SpeakScreen', {selectedPhrases});
     }
   };
 
@@ -59,7 +65,7 @@ const PhraseScreen = ({navigation, route}: PhraseScreenNavigationProp) => {
               title={item}
               onPress={() => handlePhrase(item)}
               width={'80%'}
-              color={selectedPhrase === item ? BRIGHTBLUE : LIGHTGRAY}
+              color={selectedPhrases.includes(item) ? BRIGHTBLUE : LIGHTGRAY}
               textColor={BLACK}
               borderRadius={25}
             />
@@ -72,7 +78,7 @@ const PhraseScreen = ({navigation, route}: PhraseScreenNavigationProp) => {
           title={'Next'}
           onPress={handleNext}
           width={'80%'}
-          color={selectedPhrase !== '' ? BRIGHTBLUE : LIGHTGRAY}
+          color={selectedPhrases.length > 0 ? BRIGHTBLUE : LIGHTGRAY}
           textColor={BLACK}
           borderColor={GRAY}
         />

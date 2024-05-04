@@ -164,6 +164,13 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
     loadButtonParams();
   }, []);
 
+  // useEffect(() => {
+  //   console.log("Generated Button Titles:");
+  //   buttons.forEach(button => {
+  //     console.log(button.title);
+  //   });
+  // }, [buttons]);
+
   const loadButtonParams = async () => {
     try {
       const storedButtons = await AsyncStorage.getItem('buttonParams');
@@ -181,7 +188,7 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
     }
   };
 
-  const saveButtonParams = async (buttons: any) => {
+  const saveButtonParams = async () => {
     try {
       const jsonValue = JSON.stringify(buttons);
       await AsyncStorage.setItem('buttonParams', jsonValue);
@@ -206,69 +213,63 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
 
   const generateButtonParams = () => {
     let tempButtons: ButtonParams[] = [];
+    let usedTitles = new Set(); // Используем Set для отслеживания уникальности тем
     let shuffledColors = shuffleArray([...backgroundColors]);
     let colorIndex = 0;
     let consecutiveHalfWidthCount = 0;
     let consecutiveFullWidthCount = 0;
 
     topics.forEach(topic => {
-      let addExtraHalfWidthButton = Math.random() < 0.6;
-      let isFullWidth;
+      if (!usedTitles.has(topic)) {
+        // Проверяем, не использовалась ли тема ранее
+        let addExtraHalfWidthButton = Math.random() < 0.6;
+        let isFullWidth;
 
-      if (consecutiveHalfWidthCount >= 3 || consecutiveFullWidthCount === 2) {
-        isFullWidth = true;
-        consecutiveHalfWidthCount = 0;
-      } else {
-        isFullWidth = Math.random() > 0.5;
-      }
+        if (consecutiveHalfWidthCount >= 3 || consecutiveFullWidthCount === 2) {
+          isFullWidth = true;
+          consecutiveHalfWidthCount = 0;
+        } else {
+          isFullWidth = Math.random() > 0.5;
+        }
 
-      if (isFullWidth) {
-        consecutiveFullWidthCount++;
-      } else {
-        consecutiveFullWidthCount = 0; // Важно сбрасывать счетчик при создании кнопки с неполной шириной
-        consecutiveHalfWidthCount++;
-      }
+        if (isFullWidth) {
+          consecutiveFullWidthCount++;
+        } else {
+          consecutiveFullWidthCount = 0;
+          consecutiveHalfWidthCount++;
+        }
 
-      // Если уже есть две кнопки с полной шириной подряд, следующая не должна быть с полной шириной
-      if (consecutiveFullWidthCount > 2) {
-        isFullWidth = false; // Принудительно делаем следующую кнопку с неполной шириной
-        consecutiveFullWidthCount = 0; // И сбрасываем счётчик
-      }
+        if (consecutiveFullWidthCount > 2) {
+          isFullWidth = false;
+          consecutiveFullWidthCount = 0;
+        }
 
-      // Ограничиваем добавление второй кнопки с неполной шириной, если уже есть две подряд
-      if (consecutiveHalfWidthCount === 2) {
-        addExtraHalfWidthButton = false;
-      }
+        if (consecutiveHalfWidthCount === 2) {
+          addExtraHalfWidthButton = false;
+        }
 
-      const buttonWidth = getButtonWidth(isFullWidth, addExtraHalfWidthButton);
-      let buttonHeight = isFullWidth
-        ? undefined
-        : `${Math.random() * (140 - 40) + 40}px`;
+        const buttonWidth = getButtonWidth(
+          isFullWidth,
+          addExtraHalfWidthButton,
+        );
+        let buttonHeight = isFullWidth
+          ? undefined
+          : `${Math.random() * (140 - 40) + 40}px`;
 
-      tempButtons.push({
-        title: topic,
-        isFullWidth: isFullWidth,
-        backgroundColor: shuffledColors[colorIndex++ % shuffledColors.length],
-        ...(buttonHeight && {height: buttonHeight}),
-        width: buttonWidth,
-      });
-
-      // Обработка дополнительной кнопки с неполной шириной
-      if (!isFullWidth && addExtraHalfWidthButton) {
-        const secondButtonHeight = `${Math.random() * (140 - 40) + 40}px`;
         tempButtons.push({
-          title: `${topic}`,
-          isFullWidth: false,
+          title: topic,
+          isFullWidth: isFullWidth,
           backgroundColor: shuffledColors[colorIndex++ % shuffledColors.length],
-          height: secondButtonHeight,
-          width: '49%',
+          height: buttonHeight,
+          width: buttonWidth,
         });
-        consecutiveHalfWidthCount++;
-      }
 
-      if (!isFullWidth) {
-        consecutiveHalfWidthCount =
-          consecutiveHalfWidthCount > 2 ? 0 : consecutiveHalfWidthCount;
+        usedTitles.add(topic);
+
+        if (!isFullWidth) {
+          consecutiveHalfWidthCount =
+            consecutiveHalfWidthCount > 2 ? 0 : consecutiveHalfWidthCount;
+        }
       }
     });
 

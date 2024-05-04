@@ -11,7 +11,7 @@ export type BottomStackParamList = {
   LanguageScreen: undefined;
   TopicScreen: undefined;
   PhraseScreen: {topic: string; phrases: string[]};
-  SpeakScreen: undefined;
+  SpeakScreen: {selectedPhrases: string[]};
 };
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
