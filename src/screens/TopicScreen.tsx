@@ -188,9 +188,9 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
     }
   };
 
-  const saveButtonParams = async () => {
+  const saveButtonParams = async (buttonParams: ButtonParams[]) => {
     try {
-      const jsonValue = JSON.stringify(buttons);
+      const jsonValue = JSON.stringify(buttonParams);
       await AsyncStorage.setItem('buttonParams', jsonValue);
     } catch (error) {
       // Обработка ошибки сохранения
