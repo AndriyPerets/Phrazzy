@@ -7,10 +7,7 @@ type Props = {
   color?: string;
 };
 
-const GermanyIcon: React.FC<Props> = ({
-  width = 25,
-  height = 24, // color = BRIGHTBLUE,
-}: Props) => {
+const GermanyIcon: React.FC<Props> = ({width = 25, height = 24}: Props) => {
   return (
     <Svg width={width} height={height} viewBox="0 0 25 24" fill="none">
       <G clip-path="url(#clip0_11_1194)">
