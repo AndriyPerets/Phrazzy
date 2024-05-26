@@ -42,6 +42,7 @@ import CommonButton from '../components/base/CommonButton';
 import BackIcon from '../components/svg/back';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BottomStackParamList} from '../navigation/BottomStack';
+import SQLite from 'react-native-sqlite-storage';
 
 interface ButtonParams {
   title: string;
@@ -58,6 +59,7 @@ type TopicScreenNavigationProp = StackScreenProps<
 
 const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
   // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [selectedTopic, setSelectedTopic] = useState('');
   const [buttons, setButtons] = useState<ButtonParams[]>([]);
   const backgroundColors = [

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {GRAY, LIGHTGRAY, WHITE} from '../../colors';
 import TheText from './TheText';
+import CloseIcon from '../svg/close';
 
 interface Props extends PressableProps {
   title: string;
@@ -31,8 +32,9 @@ interface Props extends PressableProps {
   fontSize?: number;
   borderRadius?: number;
   justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between';
+  closeIcon?: boolean;
+  closeIconPress?: () => void;
 }
-
 const screenWidth = Dimensions.get('window').width;
 
 const CommonButton = ({
@@ -53,8 +55,11 @@ const CommonButton = ({
   fontSize = 14,
   borderRadius,
   justifyContent = 'center',
+  closeIcon,
+  closeIconPress,
   ...restTouchableOpacityProps
 }: Props) => {
+  console.log('icon', icon);
   const calculatedWidth =
     typeof width === 'number' ? width : (parseFloat(width) / 100) * screenWidth;
   const backgroundColor = isLoading ? GRAY : color || GRAY;
@@ -137,6 +142,18 @@ const CommonButton = ({
             {icon && iconPosition === 'endOut' && renderIcon(icon)}
             {/*{icon && iconPosition === 'startOut' && renderSpacer()}*/}
           </View>
+          {closeIcon && (
+            <Pressable
+              onPress={closeIconPress}
+              style={{
+                width: iconSize,
+                height: iconSize,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <CloseIcon width={16} height={16} />
+            </Pressable>
+          )}
         </View>
       )}
     </Pressable>

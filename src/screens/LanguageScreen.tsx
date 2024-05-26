@@ -1,24 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import TheText from '../components/base/TheText';
 import {BLACK, BRIGHTBLUE, GRAY, LIGHTGRAY, WHITE} from '../colors';
-import {BlackItalic, Regular} from '../fonts';
+import {BlackItalic} from '../fonts';
 import VerticalSpace from '../components/base/VerticalSpace';
 import CommonButton from '../components/base/CommonButton';
-import GermanyIcon from '../components/svg/germany';
-import UKIcon from '../components/svg/uk';
-import UkraineIcon from '../components/svg/ukrane';
 import {BottomStackParamList} from '../navigation/BottomStack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CommonInput from '../components/base/CommonInput';
 import {TextInput as RNTextInput} from 'react-native/Libraries/Components/TextInput/TextInput';
 import useOrientation from '../hook/useOrientation';
+import useLanguageDatabase from '../hook/useLanguageDatabase';
+import {staticLanguages} from '../config/languages';
+import {languageIcons} from '../config/icons';
+import LanguageSelectionSection from '../components/LanguageSelectionSection';
 
 type LanguageScreenNavigationProp = StackScreenProps<
   BottomStackParamList,
@@ -32,108 +26,60 @@ const LanguageScreen = ({navigation}: LanguageScreenNavigationProp) => {
     useState(false);
   const [nativeLanguageFilter, setNativeLanguageFilter] = useState('');
   const [languageToLearnFilter, setLanguageToLearnFilter] = useState('');
-  const [selectedNativeLanguage, setSelectedNativeLanguage] = useState('');
-  const [selectedLanguageToLearn, setSelectedLanguageToLearn] = useState('');
+  const [selectedNativeLanguage, setSelectedNativeLanguage] = useState<
+    string | null
+  >(null);
+  const [selectedLanguageToLearn, setSelectedLanguageToLearn] = useState<
+    string | null
+  >(null);
   const nativeLanguageInputRef = useRef<RNTextInput>(null);
   const languageToLearnInputRef = useRef<RNTextInput>(null);
   const isLandscape = useOrientation();
+  const {insertLanguage, fetchLanguages, languages, dbReady, clearLanguages} =
+    useLanguageDatabase();
+
+  const handleNativeClear = () => {
+    clearLanguages('native', () => {
+      setSelectedNativeLanguage(null);
+    });
+  };
+
+  const handleLearnClear = () => {
+    clearLanguages('learn', () => {
+      setSelectedLanguageToLearn(null);
+    });
+  };
 
   useEffect(() => {
-    if (isMenuForNativeLanguageOpen && nativeLanguageInputRef.current) {
-      nativeLanguageInputRef.current.focus();
+    if (dbReady) {
+      fetchLanguages();
     }
-  }, [isMenuForNativeLanguageOpen]);
+  }, [dbReady]);
 
   useEffect(() => {
-    if (isMenuForLanguageToLearnOpen && languageToLearnInputRef.current) {
-      languageToLearnInputRef.current.focus();
-    }
-  }, [isMenuForLanguageToLearnOpen]);
-
-  // Извлечение сохраненных языков из AsyncStorage при монтировании компонента
-  useEffect(() => {
-    const getLanguages = async () => {
-      const savedNativeLanguage = await AsyncStorage.getItem(
-        'selectedNativeLanguage',
-      );
-      const savedLanguageToLearn = await AsyncStorage.getItem(
-        'selectedLanguageToLearn',
-      );
-      if (savedNativeLanguage) {
-        setSelectedNativeLanguage(savedNativeLanguage);
-      }
-      if (savedLanguageToLearn) {
-        setSelectedLanguageToLearn(savedLanguageToLearn);
-      }
+    // Обновление состояний выбранных языков после каждого изменения списка языков
+    const updateSelectedLanguages = () => {
+      const native = languages.find(lang => lang.type === 'native');
+      const learn = languages.find(lang => lang.type === 'learn');
+      setSelectedNativeLanguage(native ? native.name : null);
+      setSelectedLanguageToLearn(learn ? learn.name : null);
     };
 
-    getLanguages();
-  }, []);
+    updateSelectedLanguages();
+  }, [languages]);
 
-  // Сохранение выбранных языков в AsyncStorage каждый раз, когда они меняются
-  useEffect(() => {
-    if (selectedNativeLanguage) {
-      AsyncStorage.setItem('selectedNativeLanguage', selectedNativeLanguage);
+  const handleSelectLanguage = (language: string, type: 'native' | 'learn') => {
+    insertLanguage(language, type);
+    if (type === 'native') {
+      setSelectedNativeLanguage(language);
+      setIsMenuForNativeLanguageOpen(false);
+    } else {
+      setSelectedLanguageToLearn(language);
+      setIsMenuForLanguageToLearnOpen(false);
     }
-  }, [selectedNativeLanguage]);
-
-  useEffect(() => {
-    if (selectedLanguageToLearn) {
-      AsyncStorage.setItem('selectedLanguage', selectedLanguageToLearn);
-    }
-  }, [selectedLanguageToLearn]);
-
-  const handleNativeLanguage = (language: string) => {
-    setSelectedNativeLanguage(language);
-    setIsMenuForNativeLanguageOpen(false);
     setNativeLanguageFilter('');
-  };
-
-  const handleLanguageToLearn = (language: string) => {
-    setSelectedLanguageToLearn(language);
-    setIsMenuForLanguageToLearnOpen(false);
     setLanguageToLearnFilter('');
   };
-
-  const [languages] = useState([
-    'English',
-    'Spanish',
-    'French',
-    'German',
-    'Italian',
-    'Japanese',
-    'Chinese',
-    'Turkish',
-    'Swedish',
-    'Russian',
-    'Portuguese',
-    'Polish',
-    'Norwegian',
-    'Korean',
-    'Hindi',
-    'Greek',
-    'Finnish',
-  ]);
-
-  const [icons] = useState<{[key: string]: JSX.Element}>({
-    English: <UKIcon />,
-    Spanish: <UkraineIcon />,
-    French: <GermanyIcon />,
-    German: <GermanyIcon />,
-    Italian: <UkraineIcon />,
-    Japanese: <UKIcon />,
-    Chinese: <UKIcon />,
-    Turkish: <UkraineIcon />,
-    Swedish: <GermanyIcon />,
-    Russian: <GermanyIcon />,
-    Portuguese: <UkraineIcon />,
-    Polish: <UKIcon />,
-    Norwegian: <UKIcon />,
-    Korean: <UkraineIcon />,
-    Hindi: <GermanyIcon />,
-    Greek: <GermanyIcon />,
-    Finnish: <UkraineIcon />,
-  });
 
   const handleNext = () => {
     if (selectedLanguageToLearn && selectedNativeLanguage) {
@@ -141,13 +87,20 @@ const LanguageScreen = ({navigation}: LanguageScreenNavigationProp) => {
     }
   };
 
-  const toggleNativeLanguageMenu = () => {
-    setIsMenuForNativeLanguageOpen(!isMenuForNativeLanguageOpen);
-    // setIsMenuForNativeLanguageOpen(prevState => !prevState);
-  };
-
-  const toggleLanguageToLearnMenu = () => {
-    setIsMenuForLanguageToLearnOpen(!isMenuForLanguageToLearnOpen);
+  const toggleMenu = (type: 'native' | 'learn') => {
+    if (type === 'native') {
+      // if (!isMenuForNativeLanguageOpen) {
+      //   setSelectedNativeLanguage(null);
+      // }
+      setIsMenuForNativeLanguageOpen(!isMenuForNativeLanguageOpen);
+      setIsMenuForLanguageToLearnOpen(false);
+    } else {
+      // if (!isMenuForLanguageToLearnOpen) {
+      //   setSelectedLanguageToLearn(null);
+      // }
+      setIsMenuForLanguageToLearnOpen(!isMenuForLanguageToLearnOpen);
+      setIsMenuForNativeLanguageOpen(false);
+    }
   };
 
   const closeDropdowns = () => {
@@ -158,29 +111,12 @@ const LanguageScreen = ({navigation}: LanguageScreenNavigationProp) => {
     setLanguageToLearnFilter('');
   };
 
-  const filteredNativeLanguages =
-    nativeLanguageFilter.trim() === ''
-      ? languages
-      : languages.filter(language =>
-          language.toLowerCase().includes(nativeLanguageFilter.toLowerCase()),
+  const filteredLanguages = (filter: string) =>
+    filter.trim() === ''
+      ? staticLanguages
+      : staticLanguages.filter(lang =>
+          lang.toLowerCase().includes(filter.toLowerCase()),
         );
-
-  const filteredLanguagesToLearn =
-    languageToLearnFilter.trim() === ''
-      ? languages
-      : languages.filter(language =>
-          language.toLowerCase().includes(languageToLearnFilter.toLowerCase()),
-        );
-
-  const handleFocusNativeLanguage = () => {
-    console.log('Focus input', selectedNativeLanguage);
-    setNativeLanguageFilter('');
-  };
-
-  const handleFocusLanguageToLearn = () => {
-    console.log('Focus input', selectedLanguageToLearn);
-    setLanguageToLearnFilter('');
-  };
 
   return (
     <TouchableWithoutFeedback onPress={closeDropdowns}>
@@ -195,128 +131,44 @@ const LanguageScreen = ({navigation}: LanguageScreenNavigationProp) => {
             Select language
           </TheText>
         </View>
-        <View style={styles.subTitle}>
-          <TheText fontFamily={Regular} fontSize={16} color={BLACK}>
-            Native language
-          </TheText>
-        </View>
-        {!isMenuForNativeLanguageOpen && (
-          <CommonButton
-            title={selectedNativeLanguage || 'Select your native language'}
-            onPress={toggleNativeLanguageMenu}
-            width={'80%'}
-            color={selectedNativeLanguage !== '' ? LIGHTGRAY : BRIGHTBLUE}
-            textColor={BLACK}
-            borderRadius={25}
-            icon={icons[selectedNativeLanguage]}
-            iconPosition={'startOut'}
-            justifyContent={
-              selectedNativeLanguage !== '' ? 'flex-start' : 'center'
-            }
-          />
-        )}
-        {isMenuForNativeLanguageOpen && (
-          <>
-            <View style={styles.flatListContainer}>
-              <CommonInput
-                ref={nativeLanguageInputRef}
-                value={nativeLanguageFilter}
-                onChangeText={setNativeLanguageFilter}
-                onFocus={handleFocusNativeLanguage}
-              />
-              <FlatList
-                data={filteredNativeLanguages}
-                keyExtractor={item => item}
-                ListEmptyComponent={
-                  <TheText style={styles.emptyListText}>
-                    No languages found.
-                  </TheText>
-                }
-                renderItem={({item}) => (
-                  <>
-                    <VerticalSpace height={10} />
-                    <CommonButton
-                      title={item}
-                      onPress={() => handleNativeLanguage(item)}
-                      width={'80%'}
-                      color={LIGHTGRAY}
-                      textColor={BLACK}
-                      borderRadius={25}
-                      icon={icons[item]}
-                      iconPosition={'startOut'}
-                      justifyContent={'flex-start'}
-                    />
-                  </>
-                )}
-                horizontal={false}
-              />
-            </View>
-          </>
-        )}
+        <LanguageSelectionSection
+          title="Native language"
+          isOpen={isMenuForNativeLanguageOpen}
+          toggleMenu={() => toggleMenu('native')}
+          selectedLanguage={selectedNativeLanguage}
+          languageFilter={nativeLanguageFilter}
+          setLanguageFilter={setNativeLanguageFilter}
+          filteredLanguages={filteredLanguages(nativeLanguageFilter)}
+          handleSelectLanguage={(lang: string) =>
+            handleSelectLanguage(lang, 'native')
+          }
+          inputRef={nativeLanguageInputRef}
+          icons={languageIcons}
+          closeIconPress={handleNativeClear}
+        />
         <VerticalSpace height={20} />
-        <View style={styles.subTitle}>
-          <TheText fontFamily={Regular} fontSize={16} color={BLACK}>
-            Language to learn
-          </TheText>
-        </View>
-        {!isMenuForLanguageToLearnOpen && (
-          <CommonButton
-            title={selectedLanguageToLearn || 'Select language to learn'}
-            onPress={toggleLanguageToLearnMenu}
-            width={'80%'}
-            color={selectedLanguageToLearn !== '' ? LIGHTGRAY : BRIGHTBLUE}
-            textColor={BLACK}
-            borderRadius={25}
-            icon={icons[selectedLanguageToLearn]}
-            iconPosition={'startOut'}
-            justifyContent={
-              selectedLanguageToLearn !== '' ? 'flex-start' : 'center'
-            }
-          />
-        )}
-        {isMenuForLanguageToLearnOpen && (
-          <View style={styles.flatListContainer}>
-            <CommonInput
-              ref={languageToLearnInputRef}
-              value={languageToLearnFilter}
-              onChangeText={setLanguageToLearnFilter}
-              onFocus={handleFocusLanguageToLearn}
-            />
-            <FlatList
-              data={filteredLanguagesToLearn}
-              keyExtractor={item => item}
-              ListEmptyComponent={
-                <TheText style={styles.emptyListText}>
-                  No languages found.
-                </TheText>
-              }
-              renderItem={({item}) => (
-                <>
-                  <VerticalSpace height={10} />
-                  <CommonButton
-                    title={item}
-                    onPress={() => handleLanguageToLearn(item)}
-                    width={'80%'}
-                    color={LIGHTGRAY}
-                    textColor={BLACK}
-                    borderRadius={25}
-                    icon={icons[item]}
-                    iconPosition={'startOut'}
-                    justifyContent={'flex-start'}
-                  />
-                </>
-              )}
-              horizontal={false}
-            />
-          </View>
-        )}
+        <LanguageSelectionSection
+          title="Language to learn"
+          isOpen={isMenuForLanguageToLearnOpen}
+          toggleMenu={() => toggleMenu('learn')}
+          selectedLanguage={selectedLanguageToLearn}
+          languageFilter={languageToLearnFilter}
+          setLanguageFilter={setLanguageToLearnFilter}
+          filteredLanguages={filteredLanguages(languageToLearnFilter)}
+          handleSelectLanguage={(lang: string) =>
+            handleSelectLanguage(lang, 'learn')
+          }
+          inputRef={languageToLearnInputRef}
+          icons={languageIcons}
+          closeIconPress={handleLearnClear}
+        />
         <View style={styles.footer}>
           <CommonButton
             title={'Next'}
             onPress={handleNext}
             width={'80%'}
             color={
-              selectedLanguageToLearn !== '' && selectedNativeLanguage !== ''
+              selectedLanguageToLearn && selectedNativeLanguage
                 ? BRIGHTBLUE
                 : LIGHTGRAY
             }
