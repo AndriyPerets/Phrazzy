@@ -8,41 +8,19 @@ import {
 } from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import TheText from '../components/base/TheText';
-import {
-  BLACK,
-  BRIGHTBLUE,
-  CYAN,
-  EMERALDGREEN,
-  EXTRABLUE,
-  GRAY,
-  LIGHTBLUE,
-  LIGHTCYAN,
-  LIGHTGRAY,
-  LIGHTGREEN,
-  LIGHTMAGENTA,
-  LIGHTMAROON,
-  LIGHTNAVY,
-  LIGHTOLIVE,
-  LIGHTORANGE,
-  LIGHTPINK,
-  LIGHTPURPLE,
-  LIGHTTEAL,
-  LIGHTYELLOW,
-  MAROON,
-  ORANGE,
-  PINK,
-  PURPLE,
-  TEAL,
-  WHITE,
-  YELLOW,
-} from '../colors';
+import {BLACK, BRIGHTBLUE, EXTRABLUE, GRAY, LIGHTGRAY, WHITE} from '../colors';
 import {BlackItalic, Regular} from '../fonts';
 import VerticalSpace from '../components/base/VerticalSpace';
 import CommonButton from '../components/base/CommonButton';
 import BackIcon from '../components/svg/back';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BottomStackParamList} from '../navigation/BottomStack';
-import SQLite from 'react-native-sqlite-storage';
+import {topics} from '../config/topics';
+import {initialPhrases} from '../config/phrases';
+import {backgroundColors} from '../config/backgroundColors';
+import useSavePhrases from '../hook/useSavePhrases';
+import {useSQLiteStorage} from '../hook/useSaveTopics';
+import CommonInput from '../components/base/CommonInput';
 
 interface ButtonParams {
   title: string;
@@ -59,87 +37,38 @@ type TopicScreenNavigationProp = StackScreenProps<
 
 const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
   // const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [selectedTopic, setSelectedTopic] = useState('');
   const [buttons, setButtons] = useState<ButtonParams[]>([]);
-  const backgroundColors = [
-    LIGHTGRAY,
-    LIGHTGREEN,
-    EMERALDGREEN,
-    LIGHTBLUE,
-    BRIGHTBLUE,
-    LIGHTPURPLE,
-    PURPLE,
-    LIGHTORANGE,
-    ORANGE,
-    LIGHTYELLOW,
-    YELLOW,
-    LIGHTPINK,
-    PINK,
-    LIGHTCYAN,
-    CYAN,
-    LIGHTMAGENTA,
-    LIGHTNAVY,
-    LIGHTTEAL,
-    TEAL,
-    LIGHTOLIVE,
-    LIGHTMAROON,
-    MAROON,
-  ];
   const [refreshing, setRefreshing] = useState(false);
-  const topics = [
-    'Complex Object using the example of the verb to want. I want you to do',
-    'Verbs: "Desire & Action (e.g., \'I want you to...\')"',
-    'FoodAndDrink: "Gastronomy & Beverages"',
-    'TravelAndTransport: "Voyage & Mobility"',
-    'Shopping: "Retail Therapy"',
-    'Directions: "Navigational Commands"',
-  ];
-  const initialPhrases: Record<string, string[]> = {
-    'Complex Object using the example of the verb to want. I want you to do': [
-      'Phrase 1',
-      'Phrase 2',
-    ],
-    'Verbs: "Desire & Action (e.g., \'I want you to...\')"': [
-      'Phrase 3',
-      'Phrase 4',
-    ],
-    'FoodAndDrink: "Gastronomy & Beverages"': ['Phrase 5', 'Phrase 6'],
-    'TravelAndTransport: "Voyage & Mobility"': ['Phrase 7', 'Phrase 8'],
-    'Shopping: "Retail Therapy"': ['Phrase 9', 'Phrase 10'],
-    'Directions: "Navigational Commands"': ['Phrase 11', 'Phrase 12'],
-  };
-
-  // Извлекаем выбранную тему из AsyncStorage при монтировании
-  // useEffect(() => {
-  //   const getSelectedTopic = async () => {
-  //     const savedTopic = await AsyncStorage.getItem('selectedTopic');
-  //     if (savedTopic) {
-  //       setSelectedTopic(savedTopic);
-  //     }
-  //   };
-  //
-  //   getSelectedTopic();
-  // }, []);
+  useSavePhrases();
+  const {getTopic, setTopic, getButtonParams, saveButtonParams} =
+    useSQLiteStorage();
+  const [searchText, setSearchText] = useState('');
+  const [filteredButtons, setFilteredButtons] = useState<ButtonParams[]>([]);
 
   // Сохраняем выбранную тему в AsyncStorage каждый раз, когда она меняется
   useEffect(() => {
     if (selectedTopic) {
-      AsyncStorage.setItem('selectedTopic', selectedTopic);
+      setTopic(selectedTopic);
     }
   }, [selectedTopic]);
 
   useEffect(() => {
-    // Функция для извлечения выбранной темы и списка фраз из AsyncStorage при монтировании компонента
-    const getSavedData = async () => {
-      const savedTopic = await AsyncStorage.getItem('selectedTopic');
+    const initialize = async () => {
+      const savedTopic = await getTopic();
       if (savedTopic) {
         setSelectedTopic(savedTopic);
       }
-      // Здесь можно добавить логику для извлечения и установки списка фраз, если это необходимо
+      const storedButtons = await getButtonParams();
+      if (storedButtons.length > 0) {
+        setButtons(storedButtons);
+        setFilteredButtons(storedButtons);
+      } else {
+        generateButtonParams();
+      }
     };
 
-    getSavedData();
+    initialize();
   }, []);
 
   const onRefresh = useCallback(() => {
@@ -177,39 +106,36 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
     try {
       const storedButtons = await AsyncStorage.getItem('buttonParams');
       if (storedButtons !== null) {
-        // Данные найдены и используются
         setButtons(JSON.parse(storedButtons));
       } else {
-        // Данные не найдены, генерируем и сохраняем
         generateButtonParams();
       }
     } catch (error) {
-      // Обработка возможной ошибки
       console.log(error);
-      generateButtonParams(); // В случае ошибки генерируем параметры кнопок
+      generateButtonParams();
     }
   };
 
-  const saveButtonParams = async (buttonParams: ButtonParams[]) => {
-    try {
-      const jsonValue = JSON.stringify(buttonParams);
-      await AsyncStorage.setItem('buttonParams', jsonValue);
-    } catch (error) {
-      // Обработка ошибки сохранения
-      console.log(error);
-    }
-  };
+  // const saveButtonParams = async (buttonParams: ButtonParams[]) => {
+  //   try {
+  //     const jsonValue = JSON.stringify(buttonParams);
+  //     await AsyncStorage.setItem('buttonParams', jsonValue);
+  //   } catch (error) {
+  //     // Обработка ошибки сохранения
+  //     console.log(error);
+  //   }
+  // };
 
   const getButtonWidth = (
     isFullWidth: boolean,
     addExtraHalfWidthButton: boolean,
   ) => {
     if (isFullWidth) {
-      return '100%'; // Полная ширина
+      return '100%';
     } else if (addExtraHalfWidthButton) {
-      return '49%'; // Половина ширины, если за ней следует ещё одна кнопка
+      return '49%';
     } else {
-      return '70%'; // Две трети ширины, если это единственная кнопка с неполной шириной
+      return '70%';
     }
   };
 
@@ -276,6 +202,7 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
     });
 
     setButtons(tempButtons);
+    setFilteredButtons(tempButtons);
     saveButtonParams(tempButtons);
   };
 
@@ -294,6 +221,23 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
   const handleBack = () => {
     navigation.navigate('LanguageScreen');
   };
+
+  const handleSearch = (text: string) => {
+    setSearchText(text);
+    if (!text) {
+      setFilteredButtons(buttons); // Возвращаем исходный список, если строка поиска пуста
+    } else {
+      const lowercasedFilter = text.toLowerCase();
+      const filteredData = buttons.filter(button =>
+        button.title.toLowerCase().includes(lowercasedFilter),
+      );
+      setFilteredButtons(filteredData); // Фильтруем список по введенному тексту
+    }
+  };
+
+  useEffect(() => {
+    handleSearch(searchText);
+  }, [searchText]);
 
   return (
     <View style={styles.container}>
@@ -317,7 +261,7 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
         <View style={styles.buttonsContainer}>
-          {buttons.map((button, index) => (
+          {filteredButtons.map((button, index) => (
             <TouchableOpacity
               key={index}
               activeOpacity={0.8}
@@ -346,6 +290,14 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
         </View>
       </ScrollView>
       <View style={styles.footer}>
+        <CommonInput
+          placeholder={'Search for a topic'}
+          value={searchText}
+          onChangeText={handleSearch}
+          borderColor={GRAY}
+          width={'80%'}
+        />
+        <VerticalSpace height={20} />
         <CommonButton
           title={'Next'}
           onPress={handleNext}
@@ -353,6 +305,7 @@ const TopicScreen = ({navigation}: TopicScreenNavigationProp) => {
           color={selectedTopic !== '' ? BRIGHTBLUE : LIGHTGRAY}
           textColor={BLACK}
           borderColor={GRAY}
+          disabled={selectedTopic === ''}
         />
       </View>
       <VerticalSpace height={40} />
@@ -394,12 +347,6 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
   },
-  topic: {
-    width: '80%',
-    justifyContent: 'center',
-    // borderWidth: 1,
-    // borderColor: 'red',
-  },
   button: {
     // marginHorizontal: 1,
     marginVertical: 2,
@@ -418,16 +365,14 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
   },
+  border: {
+    borderWidth: 2,
+    borderColor: EXTRABLUE,
+  },
   footer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
     width: '100%',
-    // borderWidth: 1,
-    // borderColor: 'red',
-  },
-  border: {
-    borderWidth: 2,
-    borderColor: EXTRABLUE,
   },
 });

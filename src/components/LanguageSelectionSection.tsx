@@ -53,10 +53,10 @@ const LanguageSelectionSection = ({
           style={{
             borderWidth: 1,
             borderColor: GRAY,
-            width: '80%',
+            maxWidth: '80%',
             borderRadius: 25,
             overflow: 'hidden',
-            height: 200,
+            height: 242,
           }}>
           <CommonInput
             ref={inputRef}

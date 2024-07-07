@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {GRAY, LIGHTGRAY, WHITE} from '../../colors';
 import TheText from './TheText';
+import CloseSmallIcon from '../svg/closeSmall';
+import EditIcon from '../svg/edit';
 import CloseIcon from '../svg/close';
 
 interface Props extends PressableProps {
@@ -34,7 +36,11 @@ interface Props extends PressableProps {
   justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between';
   closeIcon?: boolean;
   closeIconPress?: () => void;
+  editable?: boolean;
+  editPhrase?: () => void;
+  deletePhrase?: () => void;
 }
+
 const screenWidth = Dimensions.get('window').width;
 
 const CommonButton = ({
@@ -57,9 +63,11 @@ const CommonButton = ({
   justifyContent = 'center',
   closeIcon,
   closeIconPress,
+  editable,
+  editPhrase,
+  deletePhrase,
   ...restTouchableOpacityProps
 }: Props) => {
-  console.log('icon', icon);
   const calculatedWidth =
     typeof width === 'number' ? width : (parseFloat(width) / 100) * screenWidth;
   const backgroundColor = isLoading ? GRAY : color || GRAY;
@@ -153,6 +161,44 @@ const CommonButton = ({
               }}>
               <CloseIcon width={16} height={16} />
             </Pressable>
+          )}
+          {editable && (
+            <>
+              <Pressable
+                onPress={deletePhrase}
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  position: 'absolute',
+                  left: -10,
+                  top: -16,
+                  backgroundColor: 'white',
+                  borderWidth: 1,
+                  borderColor: GRAY,
+                  borderRadius: iconSize / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <CloseSmallIcon />
+              </Pressable>
+              <Pressable
+                onPress={editPhrase}
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  position: 'absolute',
+                  right: -10,
+                  bottom: -16,
+                  backgroundColor: 'white',
+                  borderWidth: 1,
+                  borderColor: GRAY,
+                  borderRadius: iconSize / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <EditIcon />
+              </Pressable>
+            </>
           )}
         </View>
       )}

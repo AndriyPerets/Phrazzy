@@ -7,13 +7,22 @@ import {
   Text,
   TouchableWithoutFeedback,
   TextInput,
+  Dimensions,
+  Pressable,
 } from 'react-native';
-import {BLACK, GRAY} from '../../colors';
+import {BLACK, GRAY, LIGHTGRAY} from '../../colors';
+
+const screenWidth = Dimensions.get('window').width;
 
 interface Props extends TextInputProps {
   fontSize?: number;
   color?: string;
-  containerHeight?: number;
+  height?: number;
+  width?: string | number;
+  borderColor?: string;
+  borderRadius?: number;
+  editable?: boolean;
+  saveEdit?: (index: number) => void;
 }
 
 const CommonInput = forwardRef<RNTextInput, Props>(
@@ -25,19 +34,35 @@ const CommonInput = forwardRef<RNTextInput, Props>(
       style,
       onFocus,
       onBlur,
-      containerHeight = 50,
+      height = 50,
       value,
       onChangeText,
+      width = '100%',
+      borderColor,
+      borderRadius,
+      editable = false,
+      saveEdit,
       ...restProps
     },
     ref: ForwardedRef<TextInput>,
   ) => {
+    const calculatedWidth =
+      typeof width === 'number'
+        ? width
+        : (parseFloat(width) / 100) * screenWidth;
+
     return (
       <TouchableWithoutFeedback onPress={() => (ref as any).current?.focus()}>
         <View
           style={[
             styles.container,
-            containerHeight ? {height: containerHeight} : {},
+            {
+              height: height,
+              width: calculatedWidth,
+              borderColor: borderColor || LIGHTGRAY,
+              borderWidth: borderColor ? 1 : 0,
+              borderRadius: borderRadius || 16,
+            },
           ]}>
           {(!value || value.length === 0) && (
             <View style={styles.placeholderMainContainer}>
@@ -54,6 +79,35 @@ const CommonInput = forwardRef<RNTextInput, Props>(
             style={[styles.input, {fontSize, color}, style]}
             placeholder=""
           />
+          {editable && (
+            <Pressable
+              onPress={saveEdit as any}
+              style={{
+                width: 50,
+                height: 20,
+                position: 'absolute',
+                right: 0,
+                bottom: -6,
+                backgroundColor: 'white',
+                borderWidth: 1,
+                borderColor: GRAY,
+                borderRadius: 16,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={
+                  {
+                    // width: 24,
+                    // height: 24,
+                    // justifyContent: 'center',
+                    // alignItems: 'center',
+                  }
+                }>
+                save
+              </Text>
+            </Pressable>
+          )}
         </View>
       </TouchableWithoutFeedback>
     );

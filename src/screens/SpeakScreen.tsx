@@ -9,15 +9,23 @@ import BackIcon from '../components/svg/back';
 import CommonButton from '../components/base/CommonButton';
 import {StackScreenProps} from '@react-navigation/stack';
 import {BottomStackParamList} from '../navigation/BottomStack';
+import {initialPhrases} from '../config/phrases';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SpeakScreenNavigationProp = StackScreenProps<
   BottomStackParamList,
   'SpeakScreen'
 >;
 const SpeakScreen = ({navigation, route}: SpeakScreenNavigationProp) => {
-  const [selectedPhrases] = useState<string[]>(
+  useEffect(() => {
+    console.log('Received phrases:', route.params.selectedPhrases);
+  }, [route.params.selectedPhrases]);
+  const [selectedPhrases, setSelectedPhrases] = useState<string[]>(
     route.params.selectedPhrases || [],
   );
+  useEffect(() => {
+    setSelectedPhrases(route.params.selectedPhrases || []);
+  }, [route.params.selectedPhrases]);
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [goScreen, setGoScreen] = useState(true);
 
@@ -29,8 +37,16 @@ const SpeakScreen = ({navigation, route}: SpeakScreenNavigationProp) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleBack = () => {
-    navigation.goBack();
+  const handleBack = async () => {
+    const selectedTopic = await AsyncStorage.getItem('selectedTopic');
+    if (selectedTopic) {
+      navigation.navigate('PhraseScreen', {
+        topic: selectedTopic,
+        phrases: initialPhrases[selectedTopic],
+      });
+    } else {
+      navigation.navigate('TopicScreen');
+    }
   };
 
   const handleNext = () => {
