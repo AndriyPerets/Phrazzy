@@ -8,12 +8,14 @@ import {LanguageType} from '../asyncStorageApi/language';
 import SelectLanguage from '../screens/selectLanguage';
 import UserTargetLanguages from '../screens/userTargetLanguages';
 import {LanguageProvider} from '../hook/useLanguage';
+import rightChevron from '../../public/assets/images/rightChevron.png';
+import {Image} from 'react-native';
 
 export type MainStackParamList = {
   HelloScreen: undefined;
   UserTargetLanguages: undefined;
   SelectLanguage: {
-    type: LanguageType;
+    languageType: LanguageType;
   };
   TopicScreen: undefined;
   PhraseScreen: {topic: string; phrases: string[]};
@@ -44,12 +46,19 @@ const MainStack = () => {
         <Stack.Screen
           name="SelectLanguage"
           component={SelectLanguage}
-          options={{
-            title: 'Select language',
+          options={({route}) => ({
+            title: `Select ${route.params.languageType}`,
             headerTitleStyle: {
               textTransform: 'uppercase',
             },
-          }}
+            headerLeftLabelVisible: false,
+            headerBackImage: () => (
+              <Image style={{borderWidth: 1}} source={rightChevron} />
+            ),
+            headerLeftContainerStyle: {
+              borderWidth: 1,
+            },
+          })}
         />
         <Stack.Screen
           name="TopicScreen"

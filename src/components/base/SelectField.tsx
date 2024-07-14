@@ -2,7 +2,6 @@ import React, {useMemo} from 'react';
 
 import {
   StyleSheet,
-  ViewProps,
   ViewStyle,
   StyleProp,
   Image,
@@ -18,7 +17,7 @@ import rightChevron from '../../../public/assets/images/rightChevron.png';
 import {languageIcons} from '../../config/icons';
 import {Language} from '../../asyncStorageApi/language';
 
-interface Props extends ViewProps {
+interface Props {
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
@@ -30,7 +29,7 @@ interface Props extends ViewProps {
   language?: Language;
 }
 
-const CircleContainer = ({
+const SelectField = ({
   style,
   onPress,
   disabled,
@@ -78,7 +77,7 @@ const CircleContainer = ({
   );
 };
 
-export default CircleContainer;
+export default SelectField;
 
 const styles = StyleSheet.create({
   fieldContainer: {
