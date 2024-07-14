@@ -8,12 +8,12 @@ import VerticalSpace from '../components/base/VerticalSpace';
 import BackIcon from '../components/svg/back';
 import CommonButton from '../components/base/CommonButton';
 import {StackScreenProps} from '@react-navigation/stack';
-import {BottomStackParamList} from '../navigation/BottomStack';
+import {MainStackParamList} from '../navigation/MainStack';
 import {initialPhrases} from '../config/phrases';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SpeakScreenNavigationProp = StackScreenProps<
-  BottomStackParamList,
+  MainStackParamList,
   'SpeakScreen'
 >;
 const SpeakScreen = ({navigation, route}: SpeakScreenNavigationProp) => {

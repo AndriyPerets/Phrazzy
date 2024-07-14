@@ -2,8 +2,9 @@ import React from 'react';
 import UKIcon from '../components/svg/uk';
 import UkraineIcon from '../components/svg/ukrane';
 import GermanyIcon from '../components/svg/germany';
+import {Language} from '../asyncStorageApi/language';
 
-export const languageIcons = new Map<string, JSX.Element>([
+export const languageIcons = new Map<Language, JSX.Element>([
   ['English', <UKIcon />],
   ['Spanish', <UkraineIcon />],
   ['French', <GermanyIcon />],

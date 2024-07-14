@@ -14,7 +14,7 @@ import VerticalSpace from '../components/base/VerticalSpace';
 import CommonButton from '../components/base/CommonButton';
 import BackIcon from '../components/svg/back';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BottomStackParamList} from '../navigation/BottomStack';
+import {MainStackParamList} from '../navigation/MainStack';
 import {topics} from '../config/topics';
 import {initialPhrases} from '../config/phrases';
 import {backgroundColors} from '../config/backgroundColors';
@@ -31,7 +31,7 @@ interface ButtonParams {
 }
 
 type TopicScreenNavigationProp = StackScreenProps<
-  BottomStackParamList,
+  MainStackParamList,
   'TopicScreen'
 >;
 
