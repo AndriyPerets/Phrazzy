@@ -14,13 +14,13 @@ import VerticalSpace from '../components/base/VerticalSpace';
 import BackIcon from '../components/svg/back';
 import {BlackItalic} from '../fonts';
 import CommonButton from '../components/base/CommonButton';
-import {BottomStackParamList} from '../navigation/BottomStack';
+import {MainStackParamList} from '../navigation/MainStack';
 import {StackScreenProps} from '@react-navigation/stack';
 import CommonInput from '../components/base/CommonInput';
 import useSavePhrases from '../hook/useSavePhrases';
 
 type PhraseScreenNavigationProp = StackScreenProps<
-  BottomStackParamList,
+  MainStackParamList,
   'PhraseScreen'
 >;
 
