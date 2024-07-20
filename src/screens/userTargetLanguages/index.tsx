@@ -46,7 +46,7 @@ const UserTargetLanguages: FC<LanguageScreenNavigationProp> = ({
       await saveLanguage({language: languageToLearn, type: 'learn'});
       await saveLanguage({language: nativeLanguage, type: 'native'});
       setSaving(false);
-      navigation.navigate('TopicScreen');
+      navigation.navigate('SelectTopic');
     }
   }, [languageToLearn, nativeLanguage, navigation]);
 

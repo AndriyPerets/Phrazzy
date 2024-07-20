@@ -8,6 +8,7 @@ import {
   ImageSourcePropType,
   View,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {BLUR, GRAY, LIGHTGRAY} from '../../colors';
 import TheText from './TheText';
@@ -15,6 +16,8 @@ import {Bold} from '../../fonts';
 
 import {languageIcons} from '../../config/icons';
 import {Language} from '../../asyncStorageApi/language';
+
+const {width, height} = Dimensions.get('window');
 
 interface Item<T> {
   value: T;
@@ -31,7 +34,7 @@ interface Props<T> {
   isSelected?: boolean;
 }
 
-const ListItem = <T = string,>({
+const CardItem = <T = string,>({
   style,
   onPress,
   disabled,
@@ -76,11 +79,12 @@ const ListItem = <T = string,>({
   );
 };
 
-export default ListItem;
+export default CardItem;
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 52,
+    minHeight: height / 6,
+    width: width / 1.5,
     borderRadius: 10,
     padding: 16,
     alignItems: 'center',
