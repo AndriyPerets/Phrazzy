@@ -5,27 +5,40 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react';
-import {getPhrases, Phrases} from '../asyncStorageApi/phrases';
+import {getPhrases, getPhrasesByTopic} from '../asyncStorageApi/phrases';
+import {useLanguage} from './useLanguage';
+import {useTopic} from './useSaveTopics';
 
 type PhrasesContextType = {
-  phrasesToLearn: Phrases | undefined;
-  setPhrasesToLearn: (phrases: Phrases) => void;
+  phrasesToLearn: string[] | null;
+  setPhrasesToLearn: (phrases: string[] | null) => void;
+  availablePhrases: string[];
 };
 
 const PhrasesContext = createContext<PhrasesContextType | undefined>(undefined);
 
 const PhrasesProvider = ({children}: {children: ReactNode}) => {
-  const [phrasesToLearn, setPhrasesToLearn] = useState<Phrases>();
+  const [phrasesToLearn, setPhrasesToLearn] = useState<string[] | null>(null);
+  const [availablePhrases, setAvailablePhrases] = useState<string[]>([]);
+  const {languageToLearn} = useLanguage();
+  const {topicToLearn} = useTopic();
 
   useEffect(() => {
-    getPhrases().then(setPhrasesToLearn);
-  }, []);
+    if (languageToLearn && topicToLearn) {
+      const phrases = getPhrasesByTopic(languageToLearn, topicToLearn);
+      setAvailablePhrases(phrases);
+      getPhrases(topicToLearn, languageToLearn).then(phrases => {
+        setPhrasesToLearn(phrases);
+      });
+    }
+  }, [languageToLearn, topicToLearn]);
 
   return (
     <PhrasesContext.Provider
       value={{
         phrasesToLearn,
         setPhrasesToLearn,
+        availablePhrases,
       }}>
       {children}
     </PhrasesContext.Provider>

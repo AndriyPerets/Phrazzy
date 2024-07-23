@@ -5,27 +5,38 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react';
-import {getTopic, Topic} from '../asyncStorageApi/topic';
+import {getTopic, Topic, getTopicsByLanguage, TOPICS} from '../asyncStorageApi/topic';
+import {useLanguage} from './useLanguage';
 
 type TopicContextType = {
   topicToLearn: Topic | undefined;
-  setTopicToLearn: (topic: Topic) => void;
+  setTopicToLearn: (topic: Topic | undefined) => void;
+  availableTopics: string[];
 };
 
 const TopicContext = createContext<TopicContextType | undefined>(undefined);
 
 const TopicProvider = ({children}: {children: ReactNode}) => {
   const [topicToLearn, setTopicToLearn] = useState<Topic>();
+  const [availableTopics, setAvailableTopics] = useState<string[]>([]);
+  const {languageToLearn} = useLanguage();
 
   useEffect(() => {
-    getTopic().then(setTopicToLearn);
-  }, []);
+    if (languageToLearn) {
+      const topics = getTopicsByLanguage(languageToLearn);
+      setAvailableTopics(topics);
+      getTopic(languageToLearn).then(topic => {
+          setTopicToLearn(topic as Topic);
+      });
+    }
+  }, [languageToLearn]);
 
   return (
     <TopicContext.Provider
       value={{
         topicToLearn,
         setTopicToLearn,
+        availableTopics,
       }}>
       {children}
     </TopicContext.Provider>
