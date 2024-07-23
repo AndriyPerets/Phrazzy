@@ -24,28 +24,39 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
   const {languageToLearn} = useLanguage();
 
   const onItemPress = useCallback(
-    (value: string[]) => {
-      setPhrasesToLearn(value);
+    (value: string) => {
+      const currentIndex = phrasesToLearn?.indexOf(value);
+      let newPhrasesToLearn: any[];
+
+      if (currentIndex === -1 || !phrasesToLearn) {
+        newPhrasesToLearn = [...(phrasesToLearn || []), value];
+      } else {
+        newPhrasesToLearn = phrasesToLearn.filter(
+          (_, index) => index !== currentIndex,
+        );
+      }
+
+      setPhrasesToLearn(newPhrasesToLearn);
     },
-    [setPhrasesToLearn],
+    [phrasesToLearn, setPhrasesToLearn],
   );
 
   const onContinuePress = useCallback(async () => {
-    if (phrasesToLearn) {
+    if (phrasesToLearn && phrasesToLearn.length > 0) {
       setSaving(true);
       await savePhrases(phrasesToLearn, topicToLearn, languageToLearn);
       setSaving(false);
       navigation.navigate('SpeakPhrases');
     }
-  }, [navigation, phrasesToLearn]);
+  }, [navigation, phrasesToLearn, topicToLearn, languageToLearn]);
 
-  const renderItem: ListRenderItem<{value: string[]; label: string}> =
+  const renderItem: ListRenderItem<{value: string; label: string}> =
     useCallback(
       ({item}) => (
         <ListItem
           onPress={onItemPress}
           item={item}
-          isSelected={item.value === phrasesToLearn}
+          isSelected={phrasesToLearn?.includes(item.value)}
         />
       ),
       [onItemPress, phrasesToLearn],
@@ -62,9 +73,9 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
       <FlatList
         contentContainerStyle={styles.contentContainer}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        data={availablePhrases.map((phrases)  => ({
-          value: phrases,
-          label: phrases.toString(),
+        data={availablePhrases.map(phrase => ({
+          value: phrase,
+          label: phrase,
         }))}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
