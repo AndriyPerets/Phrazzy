@@ -33,8 +33,8 @@ const Stack = createStackNavigator<MainStackParamList>();
 const MainStack = () => {
   return (
     <LanguageProvider>
-      <PhrasesProvider>
-        <TopicProvider>
+      <TopicProvider>
+        <PhrasesProvider>
           <Stack.Navigator>
             <Stack.Screen
               name="HelloScreen"
@@ -100,8 +100,8 @@ const MainStack = () => {
               }}
             />
           </Stack.Navigator>
-        </TopicProvider>
-      </PhrasesProvider>
+        </PhrasesProvider>
+      </TopicProvider>
     </LanguageProvider>
   );
 };

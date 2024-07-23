@@ -5,9 +5,10 @@ import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {WHITE} from '../../colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ListItem from '../../components/base/ListItem';
-import {saveTopic, Topic, TOPIC_LIST} from '../../asyncStorageApi/topic';
+import {saveTopic, Topic} from '../../asyncStorageApi/topic';
 import MegaButton from '../../components/base/MegaButton';
 import {useTopic} from '../../hook/useSaveTopics';
+import {useLanguage} from '../../hook/useLanguage';
 
 type SelectTopicNavigationProp = StackScreenProps<
   MainStackParamList,
@@ -17,25 +18,26 @@ type SelectTopicNavigationProp = StackScreenProps<
 const SelectTopic: FC<SelectTopicNavigationProp> = ({navigation}) => {
   const safeAreaInsets = useSafeAreaInsets();
   const [isSaving, setSaving] = useState(false);
-  const {topicToLearn, setTopicToLearn} = useTopic();
+  const {topicToLearn, setTopicToLearn, availableTopics} = useTopic();
+  const {languageToLearn} = useLanguage();
 
   const onItemPress = useCallback(
-    (value: Topic) => {
-      setTopicToLearn(value);
+    (value: string) => {
+      setTopicToLearn(value as Topic);
     },
     [setTopicToLearn],
   );
 
   const onContinuePress = useCallback(async () => {
-    if (topicToLearn) {
+    if (topicToLearn && languageToLearn) {
       setSaving(true);
-      await saveTopic(topicToLearn);
+      await saveTopic(topicToLearn, languageToLearn);
       setSaving(false);
       navigation.navigate('SelectPhrases');
     }
-  }, [navigation, topicToLearn]);
+  }, [navigation, topicToLearn, languageToLearn]);
 
-  const renderItem: ListRenderItem<{value: Topic; label: string}> = useCallback(
+  const renderItem: ListRenderItem<{value: string; label: string}> = useCallback(
     ({item}) => (
       <ListItem
         onPress={onItemPress}
@@ -57,9 +59,9 @@ const SelectTopic: FC<SelectTopicNavigationProp> = ({navigation}) => {
       <FlatList
         contentContainerStyle={styles.contentContainer}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        data={TOPIC_LIST.map(topic => ({
+        data={availableTopics.map(topic => ({
           value: topic,
-          label: topic.toString(),
+          label: topic
         }))}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}

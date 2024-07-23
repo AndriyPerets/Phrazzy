@@ -9,18 +9,9 @@ export type Language =
   | 'French'
   | 'German'
   | 'Italian'
-  | 'Japanese'
-  | 'Chinese'
-  | 'Turkish'
-  | 'Swedish'
-  | 'Russian'
   | 'Portuguese'
-  | 'Polish'
-  | 'Norwegian'
-  | 'Korean'
-  | 'Hindi'
-  | 'Greek'
-  | 'Finnish';
+  | 'Russian'
+  | 'Japanese'
 
 const LANGUAGE_LIST: Language[] = [
   'English',
@@ -31,8 +22,6 @@ const LANGUAGE_LIST: Language[] = [
   'Portuguese',
   'Russian',
   'Japanese',
-  'Chinese',
-  'Korean',
 ];
 
 export type LanguageType = 'native' | 'learn';

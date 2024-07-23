@@ -5,13 +5,11 @@ import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {WHITE} from '../../colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import ListItem from '../../components/base/ListItem';
-import {
-  savePhrases,
-  Phrases,
-  PHRASES_LIST,
-} from '../../asyncStorageApi/phrases';
+import {savePhrases} from '../../asyncStorageApi/phrases';
 import MegaButton from '../../components/base/MegaButton';
 import {usePhrases} from '../../hook/useSavePhrases';
+import {useTopic} from '../../hook/useSaveTopics';
+import {useLanguage} from '../../hook/useLanguage';
 
 type SelectPhrasesNavigationProp = StackScreenProps<
   MainStackParamList,
@@ -21,10 +19,12 @@ type SelectPhrasesNavigationProp = StackScreenProps<
 const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
   const safeAreaInsets = useSafeAreaInsets();
   const [isSaving, setSaving] = useState(false);
-  const {phrasesToLearn, setPhrasesToLearn} = usePhrases();
+  const {phrasesToLearn, setPhrasesToLearn, availablePhrases} = usePhrases();
+  const {topicToLearn} = useTopic();
+  const {languageToLearn} = useLanguage();
 
   const onItemPress = useCallback(
-    (value: Phrases) => {
+    (value: string[]) => {
       setPhrasesToLearn(value);
     },
     [setPhrasesToLearn],
@@ -33,13 +33,13 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
   const onContinuePress = useCallback(async () => {
     if (phrasesToLearn) {
       setSaving(true);
-      await savePhrases(phrasesToLearn);
+      await savePhrases(phrasesToLearn, topicToLearn, languageToLearn);
       setSaving(false);
       navigation.navigate('SpeakPhrases');
     }
   }, [navigation, phrasesToLearn]);
 
-  const renderItem: ListRenderItem<{value: Phrases; label: string}> =
+  const renderItem: ListRenderItem<{value: string[]; label: string}> =
     useCallback(
       ({item}) => (
         <ListItem
@@ -62,7 +62,7 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
       <FlatList
         contentContainerStyle={styles.contentContainer}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        data={PHRASES_LIST.map(phrases => ({
+        data={availablePhrases.map((phrases)  => ({
           value: phrases,
           label: phrases.toString(),
         }))}
