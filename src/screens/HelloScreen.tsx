@@ -4,18 +4,17 @@ import {UltraLightItalic} from '../fonts';
 import TheText from '../components/base/TheText';
 import {BLACK, GRAY} from '../colors';
 import Start from '../components/svg/start';
-import {BottomStackParamList} from '../navigation/BottomStack';
+import {MainStackParamList} from '../navigation/MainStack';
 import {StackScreenProps} from '@react-navigation/stack';
 
 type HelloScreenNavigationProp = StackScreenProps<
-  BottomStackParamList,
+  MainStackParamList,
   'HelloScreen'
 >;
 const HelloScreen = ({navigation}: HelloScreenNavigationProp) => {
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('LanguageScreen');
+      navigation.replace('UserTargetLanguages');
     }, 1000); // Set to 1000ms or 1 second, adjust as needed
 
     return () => clearTimeout(timer);
