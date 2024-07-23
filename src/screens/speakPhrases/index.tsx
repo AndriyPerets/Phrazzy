@@ -4,9 +4,10 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {WHITE} from '../../colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Phrases, PHRASES_LIST} from '../../asyncStorageApi/phrases';
+import {Phrases} from '../../asyncStorageApi/phrases';
 import CardItem from '../../components/base/CardItem';
 import Swiper from 'react-native-deck-swiper';
+import {usePhrases} from '../../hook/useSavePhrases';
 
 type SpeakPhrasesNavigationProp = StackScreenProps<
   MainStackParamList,
@@ -17,6 +18,7 @@ const SpeakPhrases: FC<SpeakPhrasesNavigationProp> = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const swiperRef = useRef<Swiper<Phrases> | null>(null);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const {phrasesToLearn} = usePhrases();
 
   const resetTimer = () => {
     if (timer) {
@@ -44,7 +46,7 @@ const SpeakPhrases: FC<SpeakPhrasesNavigationProp> = () => {
       style={[styles.container, {paddingBottom: safeAreaInsets.bottom + 16}]}>
       <Swiper
         ref={swiperRef}
-        cards={PHRASES_LIST}
+        cards={phrasesToLearn as Phrases[]}
         renderCard={(card: Phrases) => (
           <CardItem
             item={{value: card, label: card.toString()}}

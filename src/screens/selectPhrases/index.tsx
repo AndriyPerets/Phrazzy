@@ -1,6 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import React, {FC, useCallback, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {WHITE} from '../../colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -24,28 +24,37 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
   const {languageToLearn} = useLanguage();
 
   const onItemPress = useCallback(
-    (value: string[]) => {
-      setPhrasesToLearn(value);
+    (value: string) => {
+      const currentIndex = phrasesToLearn?.indexOf(value);
+      let newPhrasesToLearn = [];
+
+      if (currentIndex === -1 || !phrasesToLearn) {
+        newPhrasesToLearn = [...(phrasesToLearn || []), value];
+      } else {
+        newPhrasesToLearn = phrasesToLearn.filter((_, index) => index !== currentIndex);
+      }
+
+      setPhrasesToLearn(newPhrasesToLearn);
     },
-    [setPhrasesToLearn],
+    [phrasesToLearn, setPhrasesToLearn],
   );
 
   const onContinuePress = useCallback(async () => {
-    if (phrasesToLearn) {
+    if (phrasesToLearn && phrasesToLearn.length > 0) {
       setSaving(true);
       await savePhrases(phrasesToLearn, topicToLearn, languageToLearn);
       setSaving(false);
       navigation.navigate('SpeakPhrases');
     }
-  }, [navigation, phrasesToLearn]);
+  }, [navigation, phrasesToLearn, topicToLearn, languageToLearn]);
 
-  const renderItem: ListRenderItem<{value: string[]; label: string}> =
+  const renderItem: ListRenderItem<{value: string; label: string}> =
     useCallback(
       ({item}) => (
         <ListItem
           onPress={onItemPress}
           item={item}
-          isSelected={item.value === phrasesToLearn}
+          isSelected={phrasesToLearn?.includes(item.value)}
         />
       ),
       [onItemPress, phrasesToLearn],
@@ -62,9 +71,9 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
       <FlatList
         contentContainerStyle={styles.contentContainer}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        data={availablePhrases.map((phrases)  => ({
-          value: phrases,
-          label: phrases.toString(),
+        data={availablePhrases.map((phrase)  => ({
+          value: phrase,
+          label: phrase
         }))}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
