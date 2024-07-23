@@ -1,6 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {MainStackParamList} from '../../navigation/MainStack';
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {WHITE} from '../../colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -26,12 +26,14 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
   const onItemPress = useCallback(
     (value: string) => {
       const currentIndex = phrasesToLearn?.indexOf(value);
-      let newPhrasesToLearn = [];
+      let newPhrasesToLearn: any[];
 
       if (currentIndex === -1 || !phrasesToLearn) {
         newPhrasesToLearn = [...(phrasesToLearn || []), value];
       } else {
-        newPhrasesToLearn = phrasesToLearn.filter((_, index) => index !== currentIndex);
+        newPhrasesToLearn = phrasesToLearn.filter(
+          (_, index) => index !== currentIndex,
+        );
       }
 
       setPhrasesToLearn(newPhrasesToLearn);
@@ -71,9 +73,9 @@ const SelectPhrases: FC<SelectPhrasesNavigationProp> = ({navigation}) => {
       <FlatList
         contentContainerStyle={styles.contentContainer}
         ItemSeparatorComponent={ItemSeparatorComponent}
-        data={availablePhrases.map((phrase)  => ({
+        data={availablePhrases.map(phrase => ({
           value: phrase,
-          label: phrase
+          label: phrase,
         }))}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
